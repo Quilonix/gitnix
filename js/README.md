@@ -2,48 +2,48 @@
 
 **Turn any GitHub repository into a fast, encrypted, zero-knowledge database.**
 
-[![PyPI](https://img.shields.io/pypi/v/gitnix)](https://pypi.org/project/gitnix/)
-[![Python](https://img.shields.io/pypi/pyversions/gitnix)](https://pypi.org/project/gitnix/)
+[![npm](https://img.shields.io/npm/v/gitnix)](https://www.npmjs.com/package/gitnix)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Quilonix/gitnix/blob/main/LICENSE)
 
-Gitnix is a Python SDK that uses GitHub repos as a database backend. All data is **end-to-end encrypted** client-side — GitHub never sees your plaintext data.
+Gitnix is a JavaScript/TypeScript SDK that uses GitHub repos as a database backend. All data is **end-to-end encrypted** client-side — GitHub never sees your plaintext data.
 
 ## Install
 
 ```bash
-pip install gitnix
+npm install gitnix
 ```
 
 ## Quick Start
 
-```python
-import os
-from gitnix import Gitnix
-from gitnix.types import GitnixConfig
+```typescript
+import { Gitnix } from 'gitnix';
 
-db = Gitnix(GitnixConfig(
-    repo="your-username/my-database",
-    token=os.environ["GITHUB_TOKEN"],
-    password="my-secret-encryption-key",
-))
+const db = new Gitnix({
+  repo: 'your-username/my-database',
+  token: process.env.GITHUB_TOKEN,
+  password: 'my-secret-encryption-key',
+});
 
-async with db:
-    users = db.collection("users")
+await db.connect();
 
-    # Insert
-    await users.insert({"name": "Alice", "age": 30, "email": "alice@example.com"})
+const users = db.collection('users');
 
-    # Query (MongoDB-style)
-    adults = await users.find({"age": {"$gte": 18}})
+// Insert
+await users.insert({ name: 'Alice', age: 30, email: 'alice@example.com' });
 
-    # Update
-    await users.update({"name": "Alice"}, {"$set": {"age": 31}})
+// Query (MongoDB-style)
+const adults = await users.find({ age: { $gte: 18 } }, { sort: { age: -1 } });
 
-    # Delete
-    await users.delete({"name": "Alice"})
+// Update
+await users.update({ name: 'Alice' }, { $set: { age: 31 } });
 
-    # Sync encrypted data to GitHub
-    await db.sync()
+// Delete
+await users.delete({ name: 'Alice' });
+
+// Sync encrypted data to GitHub
+await db.sync();
+
+await db.disconnect();
 ```
 
 ## Features
@@ -54,9 +54,9 @@ async with db:
 - **GitHub Sync** — On-demand push/pull to GitHub (encrypted blobs only)
 - **Binary/Image Storage** — Chunked upload/download with MIME detection
 - **Transactions** — Optimistic locking with conflict detection
-- **Async-Native** — Built on `asyncio` with full `async/await` support
-- **Fully Typed** — Complete type annotations, strict mypy compatible
+- **Schema Validation** — Optional type checking and constraints
 - **Rate Limit Aware** — Built-in rate limiter with queue and backpressure
+- **TypeScript First** — Full type definitions included
 
 ## Performance
 
@@ -89,30 +89,48 @@ async with db:
 
 ❌ Not for: high-traffic production (1000+ concurrent users), real-time apps, complex SQL joins, high-frequency writes (100+/sec), or data > 100GB.
 
+## GitHub Rate Limits
+
+| Pattern | API Calls/hr | Works? |
+|---------|-------------|--------|
+| Sync every 5 min | 72 | ✅ (1.4% of budget) |
+| Sync every 1 min | 360 | ✅ (7%) |
+| 100 users (cached reads) | 0 | ✅ |
+| Real-time sync (every sec) | 21,600 | ❌ |
+
+**Recommended:** Write locally (sub-ms), sync to GitHub periodically.
+
 ## Query Operators
 
-```python
-# Comparison
-await users.find({"age": {"$gt": 18}})
-await users.find({"status": {"$in": ["active", "pending"]}})
+```typescript
+// Comparison
+{ age: { $gt: 18 } }
+{ status: { $in: ['active', 'pending'] } }
+{ score: { $gte: 90, $lte: 100 } }
 
-# Logical
-await users.find({"$or": [{"city": "NYC"}, {"city": "LA"}]})
+// Logical
+{ $or: [{ city: 'NYC' }, { city: 'LA' }] }
+{ $and: [{ age: { $gte: 18 } }, { verified: true }] }
 
-# String
-await users.find({"name": {"$contains": "alice"}})
-await users.find({"email": {"$regex": "^admin@"}})
+// String
+{ name: { $contains: 'alice' } }
+{ email: { $regex: '^admin@' } }
 
-# Options
-await users.find(query, sort={"age": -1}, skip=0, limit=20)
+// Options
+await users.find(query, {
+  sort: { age: -1 },
+  skip: 0,
+  limit: 20,
+  fields: ['name', 'email'],
+});
 ```
 
 ## Also Available
 
-- **JavaScript/TypeScript SDK**: `npm install gitnix` — [npm](https://www.npmjs.com/package/gitnix)
+- **Python SDK**: `pip install gitnix` — [PyPI](https://pypi.org/project/gitnix/)
 - **Full Example App**: Event registration platform with admin panel, auth, and 45 E2E tests
 
-## Documentation
+## Links
 
 - [GitHub Repository](https://github.com/Quilonix/gitnix)
 - [JavaScript API Reference](https://github.com/Quilonix/gitnix/blob/main/docs/API-JS.md)
@@ -121,7 +139,7 @@ await users.find(query, sort={"age": -1}, skip=0, limit=20)
 - [Usage Guide & Examples](https://github.com/Quilonix/gitnix/blob/main/docs/GUIDE.md)
 - [Architecture Deep Dive](https://github.com/Quilonix/gitnix/blob/main/ARCHITECTURE.md)
 - [Example App (Event Registration)](https://github.com/Quilonix/gitnix/tree/main/examples)
-- [npm (JavaScript SDK)](https://www.npmjs.com/package/gitnix)
+- [Python SDK on PyPI](https://pypi.org/project/gitnix/)
 
 ## License
 
