@@ -1,0 +1,17 @@
+{
+  "name": "gitnix-notes",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Production Notes App powered by Gitnix (GitHub-backed encrypted database)",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  },
+  "dependencies": {
+    "tweetnacl": "1.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

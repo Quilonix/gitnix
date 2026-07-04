@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gitnix"
+version = "1.0.0"
+description = "Use GitHub repos as an encrypted, high-performance database"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Mithun Gowda B", email = "mithungowda.b7411@gmail.com" }]
+keywords = ["github", "database", "encrypted", "sdk", "nosql", "git", "zero-knowledge", "e2e-encryption", "local-first"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Security :: Cryptography",
+    "Typing :: Typed",
+]
+dependencies = [
+    "httpx>=0.27.0",
+    "pynacl>=1.5.0",
+    "argon2-cffi>=23.1.0",
+    "msgpack>=1.0.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/Quilonix/gitnix"
+Repository = "https://github.com/Quilonix/gitnix"
+Issues = "https://github.com/Quilonix/gitnix/issues"
+Documentation = "https://github.com/Quilonix/gitnix/tree/main/docs"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.5.0",
+    "mypy>=1.11.0",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "ANN", "B", "SIM"]
+ignore = ["ANN101", "ANN102"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

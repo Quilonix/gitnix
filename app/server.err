@@ -1,0 +1,21 @@
+node:events:486
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+[90m    at Server.setupListenHandle [as _listen2] (node:net:1948:16)[39m
+[90m    at listenInCluster (node:net:2005:12)[39m
+[90m    at Server.listen (node:net:2110:7)[39m
+    at startServer [90m(file:///C:/Projects/Gitnix/app/[39mserver.mjs:479:10[90m)[39m
+[90m    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+Emitted 'error' event on Server instance at:
+[90m    at emitErrorNT (node:net:1984:8)[39m
+[90m    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)[39m {
+  code: [32m'EADDRINUSE'[39m,
+  errno: [33m-4091[39m,
+  syscall: [32m'listen'[39m,
+  address: [32m'::'[39m,
+  port: [33m3000[39m
+}
+
+Node.js v24.14.1

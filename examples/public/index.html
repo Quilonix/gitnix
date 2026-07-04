@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gitnix Events</title>
+  <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand" onclick="navigate('home')">
+        <span class="brand-icon">📅</span> Gitnix Events
+      </a>
+      <div class="nav-links">
+        <a href="#" onclick="navigate('home')" class="nav-link">Events</a>
+        <a href="#" onclick="navigate('my-registrations')" class="nav-link auth-only" style="display:none">My Registrations</a>
+        <a href="#" onclick="navigate('admin')" class="nav-link admin-only" style="display:none">Admin</a>
+        <a href="#" onclick="navigate('login')" class="nav-link guest-only">Login</a>
+        <a href="#" onclick="navigate('signup')" class="nav-link guest-only">Sign Up</a>
+        <div class="user-menu auth-only" style="display:none">
+          <span class="user-name"></span>
+          <button onclick="logout()" class="btn btn-sm btn-outline">Logout</button>
+        </div>
+      </div>
+      <button class="nav-toggle" onclick="toggleMobileMenu()">☰</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- HOME: Event Listing -->
+    <section id="page-home" class="page active">
+      <div class="page-header">
+        <h1>Upcoming Events</h1>
+        <p class="subtitle">Discover and register for events near you</p>
+      </div>
+      <div id="events-grid" class="events-grid">
+        <div class="loading">Loading events...</div>
+      </div>
+    </section>
+
+    <!-- EVENT DETAIL -->
+    <section id="page-event" class="page">
+      <div id="event-detail" class="event-detail">
+        <div class="loading">Loading event...</div>
+      </div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="page-login" class="page">
+      <div class="auth-card">
+        <h2>Login</h2>
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" required autocomplete="current-password">
+          </div>
+          <div id="login-error" class="error-msg"></div>
+          <button type="submit" class="btn btn-primary btn-full">Login</button>
+        </form>
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="navigate('signup')">Sign Up</a></p>
+      </div>
+    </section>
+
+    <!-- SIGNUP -->
+    <section id="page-signup" class="page">
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <form id="signup-form" onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required minlength="6" autocomplete="new-password">
+          </div>
+          <div id="signup-error" class="error-msg"></div>
+          <button type="submit" class="btn btn-primary btn-full">Sign Up</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="navigate('login')">Login</a></p>
+      </div>
+    </section>
+
+    <!-- MY REGISTRATIONS -->
+    <section id="page-my-registrations" class="page">
+      <div class="page-header">
+        <h1>My Registrations</h1>
+      </div>
+      <div id="my-registrations-list" class="registrations-list">
+        <div class="loading">Loading...</div>
+      </div>
+    </section>
+
+    <!-- ADMIN PANEL -->
+    <section id="page-admin" class="page">
+      <div class="admin-panel">
+        <div class="page-header">
+          <h1>Admin Dashboard</h1>
+        </div>
+
+        <!-- Stats -->
+        <div id="admin-stats" class="stats-grid"></div>
+
+        <!-- Tabs -->
+        <div class="admin-tabs">
+          <button class="tab-btn active" onclick="switchAdminTab('events')">Events</button>
+          <button class="tab-btn" onclick="switchAdminTab('users')">Users</button>
+          <button class="tab-btn" onclick="switchAdminTab('registrations')">Registrations</button>
+        </div>
+
+        <!-- Create Event Form -->
+        <div id="admin-tab-events" class="admin-tab active">
+          <div class="admin-section-header">
+            <h3>Manage Events</h3>
+            <button class="btn btn-primary btn-sm" onclick="showCreateEvent()">+ New Event</button>
+          </div>
+          <div id="create-event-form" class="create-form" style="display:none">
+            <form onsubmit="handleCreateEvent(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Title</label>
+                  <input type="text" id="event-title" required>
+                </div>
+                <div class="form-group">
+                  <label>Date</label>
+                  <input type="datetime-local" id="event-date" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Location</label>
+                  <input type="text" id="event-location" required>
+                </div>
+                <div class="form-group">
+                  <label>Capacity</label>
+                  <input type="number" id="event-capacity" min="1" value="50" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="event-description" rows="3"></textarea>
+              </div>
+              <div id="create-event-error" class="error-msg"></div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Create Event</button>
+                <button type="button" class="btn btn-outline" onclick="hideCreateEvent()">Cancel</button>
+              </div>
+            </form>
+          </div>
+          <div id="admin-events-list" class="admin-list"></div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="admin-tab-users" class="admin-tab">
+          <h3>Manage Users</h3>
+          <div id="admin-users-list" class="admin-list"></div>
+        </div>
+
+        <!-- Registrations Tab -->
+        <div id="admin-tab-registrations" class="admin-tab">
+          <h3>All Registrations</h3>
+          <div id="admin-registrations-list" class="admin-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "name": "gitnix",
+  "version": "1.0.0",
+  "description": "Use GitHub repos as an encrypted, high-performance database",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "tweetnacl": "1.0.3",
+    "tweetnacl-util": "0.15.1",
+    "argon2-browser": "1.18.0",
+    "msgpackr": "1.11.2",
+    "uuid": "10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "tsup": "8.2.4",
+    "vitest": "2.0.5",
+    "@types/node": "22.1.0",
+    "rimraf": "6.0.1",
+    "eslint": "9.8.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Quilonix/gitnix"
+  },
+  "homepage": "https://github.com/Quilonix/gitnix#readme",
+  "bugs": {
+    "url": "https://github.com/Quilonix/gitnix/issues"
+  },
+  "author": "Quilonix",
+  "keywords": ["github", "database", "encrypted", "sdk", "nosql", "git", "zero-knowledge", "e2e-encryption", "local-first", "offline"]
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Encrypted notes stored on GitHub. Zero-knowledge — your data, your keys.">
+  <title>Gitnix Notes</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo"><span class="logo-icon">🔐</span> Gitnix Notes</h1>
+        <span class="badge" id="encBadge">E2E Encrypted</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <input type="search" id="searchInput" placeholder="Search notes..." aria-label="Search notes">
+        </div>
+        <button class="btn btn-primary" id="btnNew" aria-label="Create new note">
+          <span>+</span> New Note
+        </button>
+        <button class="btn btn-ghost" id="btnStatus" aria-label="View status">Status</button>
+      </div>
+    </header>
+
+    <!-- Loading State -->
+    <div class="loading-screen" id="loadingScreen">
+      <div class="loading-spinner"></div>
+      <p>Decrypting notes from GitHub...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-banner" id="errorBanner" hidden>
+      <span id="errorText"></span>
+      <button class="btn-close" id="dismissError" aria-label="Dismiss">&times;</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main" id="mainContent" hidden>
+      <!-- Empty State -->
+      <div class="empty" id="emptyState" hidden>
+        <div class="empty-icon">📝</div>
+        <h2>No notes yet</h2>
+        <p>Create your first note — it will be encrypted and stored on GitHub.</p>
+        <button class="btn btn-primary" id="btnNewEmpty">+ Create Note</button>
+      </div>
+
+      <!-- Notes Grid -->
+      <div class="grid" id="notesGrid"></div>
+    </main>
+
+    <!-- Editor Modal -->
+    <dialog class="modal" id="editorModal">
+      <form class="modal-form" id="noteForm">
+        <div class="modal-header">
+          <h2 id="editorTitle">New Note</h2>
+          <button type="button" class="btn-close" id="closeEditor" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="title" id="inputTitle" placeholder="Title" maxlength="500" autocomplete="off">
+          <textarea name="content" id="inputContent" placeholder="Write something..." rows="10"></textarea>
+          <div class="editor-options">
+            <div class="option-group">
+              <label>Color</label>
+              <div class="color-swatches" id="colorSwatches">
+                <button type="button" class="swatch active" data-color="#ffffff" style="background:#fff"></button>
+                <button type="button" class="swatch" data-color="#fef3c7" style="background:#fef3c7"></button>
+                <button type="button" class="swatch" data-color="#d1fae5" style="background:#d1fae5"></button>
+                <button type="button" class="swatch" data-color="#dbeafe" style="background:#dbeafe"></button>
+                <button type="button" class="swatch" data-color="#ede9fe" style="background:#ede9fe"></button>
+                <button type="button" class="swatch" data-color="#fce7f3" style="background:#fce7f3"></button>
+                <button type="button" class="swatch" data-color="#f3f4f6" style="background:#f3f4f6"></button>
+              </div>
+            </div>
+            <div class="option-group">
+              <label for="inputTags">Tags</label>
+              <input type="text" id="inputTags" placeholder="work, ideas, ..." autocomplete="off">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <label class="pin-toggle">
+            <input type="checkbox" id="inputPinned"> Pin note
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="cancelEditor">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="saveBtn">
+              <span class="save-text">Save</span>
+              <span class="save-loading" hidden>Saving...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Status Modal -->
+    <dialog class="modal modal-sm" id="statusModal">
+      <div class="modal-header">
+        <h2>Database Status</h2>
+        <button type="button" class="btn-close" id="closeStatus" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="statusBody"></div>
+    </dialog>
+
+    <!-- Toast Container -->
+    <div class="toasts" id="toasts"></div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
